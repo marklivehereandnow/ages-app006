@@ -58,10 +58,12 @@ public class AgesEngine {
     public void setDebgug(String str) {
         debug = str;
     }
+
     public void moveOneCard(List<AgesCard> from, int index, List<AgesCard> to) {
 
         to.add(from.remove(index));
     }
+
     public Field getField() {
         return field;
     }
@@ -277,7 +279,8 @@ public class AgesEngine {
                 return " just did field.show(10)";
             case "version":
                 return doVersion();
-
+            case "shuffle":
+                return shuffle();
             case "change-turn":
             case "c":
             case "":
@@ -335,7 +338,9 @@ public class AgesEngine {
             case "take":
             case "take-card":
                 return actTakeCard(val);
-
+            case "doEvent":
+            case "e":
+                return doEvent(val);
             default:
                 System.out.println("Unknown keyword, " + keyword);
                 return false;
@@ -700,6 +705,11 @@ public class AgesEngine {
                         System.out.println("時代:" + card.getAge() + " " + card.getTag() + " " + key + " " + getSameSizeName(card.getName()) + " " + card.getAction().trim() + " " + card.getIconPoints() + " " + card.getEffect());
                     }
                     break;
+                case 8:
+                    if (card.getTag().equals("事件")) {
+                        System.out.println("時代:" + card.getAge() + " " + card.getTag() + " " + key + " " + getSameSizeName(card.getName()) + " " + card.getAction().trim() + " " + card.getIconPoints() + " " + card.getEffect());
+                    }
+                    break;
 
                 default:
                     System.out.println(" " + key + " " + getSameSizeName(card.getName()) + " " + card.getAction().trim());
@@ -776,6 +786,10 @@ public class AgesEngine {
 
         return "just did 執行行動牌";
     }
+// private void doEvent() {
+// 
+// }
+// 
 
     private void doChangeStage() {
         field.set現在階段(field.內政階段);
@@ -783,7 +797,7 @@ public class AgesEngine {
 
     private boolean actPlayMilitaryCard(int val) {
 //            field.getCurrentPlayer().actPlayMilitaryCard(val);
-    if (val > field.getCurrentPlayer().手牌軍事牌區.size() - 1) {
+        if (val > field.getCurrentPlayer().手牌軍事牌區.size() - 1) {
             System.out.println("我無法作出這個動作，我這個位置沒有牌");
             return true;
         }
@@ -794,22 +808,36 @@ public class AgesEngine {
         switch (card.getTag()) {
             case "事件":
             case "領土":
-                    
                 System.out.println("將Tag= 事件 or 領土 牌放入未來事件");
                 moveOneCard(field.getCurrentPlayer().手牌軍事牌區, val, field.get未來事件());
                 field.getCurrentPlayer().get文化().addPoints(card.getAge());//放事件得分數
-                System.out.println("依照牌的時代給予"+card.getAge()+"分");
-                moveOneCard(field.get當前事件(), 0 , field.get現在發生事件());
-                
-                
+                System.out.println("依照牌的時代給予" + card.getAge() + "分");
+                if (field.get現在發生事件().size() != 0) {
+                    field.get現在發生事件().remove(0);
+                }
+                moveOneCard(field.get當前事件(), 0, field.get現在發生事件());
+                if (field.get當前事件().size() == 0) {
+                    Collections.shuffle(field.get未來事件());
+                    for (int j = 0; j < 4; j++) {
+                        for (int k = 0; k < 3; k++) {
+                            if (field.get未來事件().get(k).getAge() > field.get未來事件().get(k + 1).getAge()) {
+                                moveOneCard(field.get未來事件(), k, field.get未來事件());
+                                k--;
+                            }
+                        }
+                    }
+                    moveOneCard(field.get未來事件(), 0, field.get當前事件());
+                    moveOneCard(field.get未來事件(), 0, field.get當前事件());
+                    moveOneCard(field.get未來事件(), 0, field.get當前事件());
+                    moveOneCard(field.get未來事件(), 0, field.get當前事件());
+                }
+//                Collections.shuffle(時代A內政牌);
 //                field.getCurrentPlayer().科技.addPoints(-card.getCostIdea());
                 break;
 
             default:
                 System.out.println("現在只針對事件卡");
-////                    System.out.println("");
-//                System.out.print("" + card.toString(1));
-//                moveOneCard(field.getCurrentPlayer().手牌軍事牌區, val, field.getCurrentPlayer().未分類區);
+
         }
 
         //
@@ -819,7 +847,55 @@ public class AgesEngine {
         //
         // 06/16 13:30, by Mark
         //
+        return true;
+    }
 
+    private String shuffle() {
+        Collections.shuffle(field.get當前事件());
+        return "123";
+    }
+
+    private boolean doEvent(int val) {
+        System.out.println("現在執行卡號ID為:" + val + "的事件");
+        System.out.println("只執行Tag=事件");
+//        System.out.println(field.get現在發生事件().get(0).getAction());
+        switch (val) {
+            case 1005:
+                field.getP1().act擴充人口();
+                field.getP2().act擴充人口();
+                break;
+            case 1006:
+                System.out.println("需要提示用戶例子: AAA是否將免費將一名閒置工人升級為軍事部隊(Y/N)");
+                System.out.println("需要提示用戶例子: BBB是否將免費將一名閒置工人升級為軍事部隊(Y/N)");
+                break;
+                
+            case 1008:
+//                field.getP1().get內政區
+                field.getP2().act擴充人口();
+                
+                break;
+                /*
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+            case :
+                break;
+*/
+            default:
+        }
         return true;
     }
 }
