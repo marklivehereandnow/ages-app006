@@ -392,6 +392,7 @@ public class AgesEngine {
         return " just did doVersion";
     }
 
+    
     public String getCurrentPlayer() {
         return field.getCurrentPlayer().getName();
     }
@@ -423,6 +424,19 @@ public class AgesEngine {
         for (AgesCard ac : field.getCurrentPlayer().get手牌內政牌區()) {
             if (ac.getSeq() == seq) {
                 return actPlayCard(index);
+            }
+            index++;
+        }
+        return true;
+    }
+    
+    public boolean actPlayMilitaryCardBySeq(int seq) {
+        int index = 0;
+        for (AgesCard ac : field.getCurrentPlayer().get手牌軍事牌區()) {
+            if (ac.getSeq() == seq) {
+                System.out.println("actPlayMilitaryCardBySeq seq="+seq);
+                System.out.println("going to actPlayMilitaryCard index="+index);
+                return actPlayMilitaryCard(index);
             }
             index++;
         }
@@ -476,6 +490,7 @@ public class AgesEngine {
         //
         field.reset();
         field.set現在階段(field.內政階段);
+        System.out.println(" just update set現在階段 to be "+field.get當前時代());
         //卡牌列
         for (int k = 0; k < 13; k++) {
             field.moveOneCard(field.get時代A內政牌(), 0, field.getCardRow());
@@ -802,7 +817,7 @@ public class AgesEngine {
             return true;
         }
         AgesCard card = field.getCurrentPlayer().手牌軍事牌區.get(val);
-        System.out.println(card);
+        System.out.println("actPlayMilitaryCard, index is "+val+" and card name is "+card.getName()+" "+card.getTag());
 //        System.out.println(""+card.getCostRevolution());
 //        System.out.println("打出這張牌需要花費(" + card.getCostIdea() + ")科技");
         switch (card.getTag()) {

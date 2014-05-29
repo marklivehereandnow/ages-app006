@@ -21,62 +21,60 @@ public class BasicView {
     private String debug;
     private int counter;
     private String militaryCardOption;
-   public Map<String, Integer> getPlayerScore(int player) {
 
-if (player == 1) {
+    public Map<String, Integer> getPlayerScore(int player) {
 
-    return engine.getField().getP1().getScore().getMap();
+        if (player == 1) {
 
-}
+            return engine.getField().getP1().getScore().getMap();
 
-if (player == 2) {
+        }
 
-    return engine.getField().getP2().getScore().getMap();
+        if (player == 2) {
 
-}
+            return engine.getField().getP2().getScore().getMap();
 
-return null;
+        }
 
-   }
+        return null;
 
-public Map<Integer, Integer> getPlayerTokens黃(int player) {
+    }
 
-if (player == 1) {
+    public Map<Integer, Integer> getPlayerTokens黃(int player) {
 
-    return engine.getField().getP1().getToken黃().getMap();
+        if (player == 1) {
 
-}
+            return engine.getField().getP1().getToken黃().getMap();
 
-if (player == 2) {
+        }
 
-    return engine.getField().getP2().getToken黃().getMap();
+        if (player == 2) {
 
-}
+            return engine.getField().getP2().getToken黃().getMap();
 
-return null;
+        }
 
-   }
+        return null;
 
+    }
 
+    public Map<Integer, Integer> getPlayerTokens藍(int player) {
 
-   public Map<Integer, Integer> getPlayerTokens藍(int player) {
+        if (player == 1) {
 
-if (player == 1) {
+            return engine.getField().getP1().getToken藍().getMap();
 
-    return engine.getField().getP1().getToken藍().getMap();
+        }
 
-}
+        if (player == 2) {
 
-if (player == 2) {
+            return engine.getField().getP2().getToken藍().getMap();
 
-    return engine.getField().getP2().getToken藍().getMap();
+        }
 
-}
+        return null;
 
-return null;
-
-   }
-
+    }
 
     public String getMilitaryCardOption() {
         return militaryCardOption;
@@ -104,6 +102,10 @@ return null;
         return engine.getField().getCurrentPlayer().getName();
     }
 
+    public int getCurrentStage() {
+        return engine.getField().get現在階段();
+    }
+
     public void doStart() throws IOException, AgesException {
         engine.doCmd("start");
     }
@@ -123,6 +125,9 @@ return null;
 
     public List<AgesCard> getSector未來事件() {
         return engine.getField().get未來事件();
+    }
+public List<AgesCard> getSector現在發生事件() {
+        return engine.getField().get現在發生事件();
     }
 
     public List<AgesCard> getSector當前事件() {
@@ -220,6 +225,13 @@ return null;
         System.out.println(" doPlayCard... , SEQ=" + index);
         engine.actPlayCardBySeq(index);
     }
+    public void doPlayMilitaryCard(int index) throws IOException, AgesException {
+        System.out.println(" doPlayMilitaryCard... , SEQ=" + index);
+        engine.actPlayMilitaryCardBySeq(index);
+    }
+    
+    
+    
 //    public void doPlayMilitaryCard(int index) throws IOException, AgesException{
 //        System.out.println(" doPlayMilitaryCard... , SEQ="+index);
 //        if (engine.getCurrentPlayer().equals("AAA") ){

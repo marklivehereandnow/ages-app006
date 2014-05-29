@@ -12,7 +12,22 @@
     </h:head>
     <h:body>
         <h:form>
-            <table>
+    
+            <h:panelGrid columns="10" cellpadding="5">
+                <p:commandButton value="New Game" action="#{basicView.doNewGame()}" update="cardrow_img,age,round, player,stage, p1hand"  />
+                <p:commandButton value="Start" action="#{basicView.doStart()}" update="cardrow_img,age,round, player,stage, p1hand"  />
+
+
+                <h:outputLabel for="name" value="Name:" style="font-weight:bold" />
+                <p:inputText id="name" value="#{basicView.text}" />
+                <p:commandButton value="Submit Command" action="#{basicView.doSubmitCommand()}" update="cardrow_img,age,round, player,stage, p1hand"  />
+
+
+
+                <p:commandButton value="Change Turn" action="#{basicView.doChangeTurn()}" update="cardrow_img,age,round, player,stage, p1hand"  />
+
+            </h:panelGrid>
+          <table>
                 <tr>
                     <td><table> <tr><td><strong>Better UI to develop/test Ages Game</strong></td></tr></table></td>
                     <th style="background-color: lightcyan">Round</th>
@@ -28,26 +43,16 @@
                         <h:outputText id="player" value="#{basicView.currentPlayer}" />
                     </td>
 
+                    <th style="background-color: lightcyan">Stage</th>
+                    <td >
+                        <h:outputText id="stage" value="#{basicView.currentStage}" />
+                    </td>
+
 
 
                 </tr>
 
-            </table>    
-            <h:panelGrid columns="10" cellpadding="5">
-                <p:commandButton value="New Game" action="#{basicView.doNewGame()}" update="cardrow_img,age,round, player, p1hand" icon="ui-icon-check" />
-                <p:commandButton value="Start" action="#{basicView.doStart()}" update="cardrow_img,age,round, player, p1hand" icon="ui-icon-check" />
-
-
-                <h:outputLabel for="name" value="Name:" style="font-weight:bold" />
-                <p:inputText id="name" value="#{basicView.text}" />
-                <p:commandButton value="Submit Command" action="#{basicView.doSubmitCommand()}" update="cardrow_img,age,round, player, p1hand" icon="ui-icon-check" />
-
-
-
-                <p:commandButton value="Change Turn" action="#{basicView.doChangeTurn()}" update="cardrow_img,age,round, player, p1hand" icon="ui-icon-check" />
-
-            </h:panelGrid>
-
+            </table>  
             <p:tabView id="cardrow_img">
                 <p:tab title="for civil">
 
@@ -61,6 +66,15 @@
                     </h:panelGrid>
                 </p:tab>
                 <p:tab title="for military">
+                    <h:panelGrid  columns="13" cellpadding="0">
+                        <h3>現在發生</h3>
+
+                        <c:forEach  var="zzz" items="#{basicView.sector現在發生事件}">
+                            <h:commandButton action="#{basicView.doTakeCard(zzz.seq)}"  image="#{basicView.imgBaseDir}#{zzz.id}#{basicView.imgExt}" >
+                                <f:ajax render="@form" />
+                            </h:commandButton>    
+                        </c:forEach>
+                    </h:panelGrid>
                     <h:panelGrid  columns="13" cellpadding="0">
                         <h3>當前事件</h3>
                         <c:forEach  var="zzz" items="#{basicView.sector當前事件}">
@@ -79,6 +93,8 @@
                             </h:commandButton>    
                         </c:forEach>
                     </h:panelGrid>
+
+                
                     <h:panelGrid  columns="13" cellpadding="0">
                         <h3>時代軍事</h3>
 
@@ -178,8 +194,8 @@
                             </td>
                             <td>    <h:panelGrid  columns="13" cellpadding="0">
                                     <c:forEach  var="zzz" items="#{basicView.playerAAA手牌軍事牌區}">
-                                        <h:commandButton action="#{basicView.doNOTHING(zzz.seq)}" image="#{basicView.imgBaseDir}#{zzz.id}#{basicView.imgExt}" >
-                                            <f:ajax render="@this" />
+                                        <h:commandButton action="#{basicView.doPlayMilitaryCard(zzz.seq)}" image="#{basicView.imgBaseDir}#{zzz.id}#{basicView.imgExt}" >
+                                            <f:ajax render="@form" />
                                         </h:commandButton>    
                                     </c:forEach>
                                 </h:panelGrid></td>
@@ -482,7 +498,7 @@
                         </p:dataTable>
                     </div>
                 </p:tab>
-                 <p:tab title="Yellow and Blue Tokens">
+                <p:tab title="Yellow and Blue Tokens">
                     <div  style="float:left; width:47%">
 
 

@@ -56,6 +56,18 @@ public class Field {
         this.現在階段 = 現在階段;
     }
 
+//    public String getCurrentStage(){
+//        if (當前時代==政治階段){
+//            return "政治階段";
+//        }
+//        if (當前時代==內政階段){
+//            return "內政階段";
+//        }
+//        System.out.println("what is 當前時代?"+當前時代);
+//        
+//        
+//        return "???";
+//    }
     public int get當前時代() {
         return 當前時代;
     }
